@@ -78,9 +78,10 @@ func respondToIssueMentioned(channel string, issueID string) {
 		Markdown: true,
 	}
 
-	issueData := getJiraIssue(issueID)
+	//issueData := getJiraIssue(issueID)
+    url := getJiraURL(issueID)
 
-	api.PostMessage(channel, formatMessage(issueData), params)
+	api.PostMessage(channel, url, params)
 }
 
 func getSlackAPI() *slack.Client {
@@ -133,7 +134,7 @@ func shouldIgnoreMessage(message slack.Msg) bool {
 }
 
 func extractIssueIDs(message string) []string {
-	re := regexp.MustCompile(`\b(\w+)-(\d+)\b`)
+	re := regexp.MustCompile(`\b([A-Z]+)-(\d+)\b`)
 	matches := re.FindAllString(message, -1)
 
 	// @see http://www.dotnetperls.com/remove-duplicates-slice
